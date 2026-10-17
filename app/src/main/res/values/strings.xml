@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Sally Launcher</string>
+
+    <string name="nav_home">Beranda</string>
+    <string name="nav_versions">Versi</string>
+    <string name="nav_content">Konten</string>
+    <string name="nav_settings">Pengaturan</string>
+
+    <string name="home_title">Siap main</string>
+    <string name="home_no_version_title">Belum ada versi game</string>
+    <string name="home_no_version_body">Impor APK Minecraft Bedrock milikmu di tab Versi untuk mulai.</string>
+    <string name="home_open_versions">Buka tab Versi</string>
+    <string name="home_launch">Mainkan</string>
+
+    <string name="versions_title">Versi</string>
+    <string name="versions_empty_title">Belum ada versi terpasang</string>
+    <string name="versions_empty_body">Versi yang kamu impor akan tampil di sini, masing-masing dengan data terpisah.</string>
+    <string name="versions_import">Impor APK</string>
+    <string name="versions_import_soon">Impor APK hadir di Tahap 2.</string>
+
+    <string name="content_title">Konten</string>
+    <string name="content_empty_title">Belum ada konten</string>
+    <string name="content_empty_body">World, resource pack, dan server akan dikelola di sini.</string>
+
+    <string name="settings_title">Pengaturan</string>
+    <string name="settings_appearance">Tampilan</string>
+    <string name="settings_theme_mode">Mode tema</string>
+    <string name="settings_theme_system">Ikuti sistem</string>
+    <string name="settings_theme_light">Terang</string>
+    <string name="settings_theme_dark">Gelap</string>
+    <string name="settings_dynamic_color">Warna dinamis</string>
+    <string name="settings_dynamic_color_desc">Ambil warna dari wallpaper (Android 12+).</string>
+    <string name="settings_storage">Penyimpanan</string>
+    <string name="settings_storage_root">Lokasi data launcher</string>
+    <string name="settings_about">Tentang</string>
+    <string name="settings_version">Versi aplikasi</string>
+</resources>
