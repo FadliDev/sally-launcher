@@ -22,6 +22,7 @@ import com.sally.launcher.data.settings.ThemeMode
 import com.sally.launcher.ui.nav.Destination
 import com.sally.launcher.ui.screens.ContentScreen
 import com.sally.launcher.R
+import com.sally.launcher.data.versions.GameVersion
 import com.sally.launcher.ui.screens.HomeScreen
 import com.sally.launcher.ui.screens.ProgressDialog
 import com.sally.launcher.ui.screens.SettingsScreen
@@ -35,6 +36,7 @@ fun LauncherRoot(
     versionsViewModel: VersionsViewModel,
     onThemeMode: (ThemeMode) -> Unit,
     onDynamicColor: (Boolean) -> Unit,
+    onLaunch: (GameVersion) -> Unit,
 ) {
     val navController = rememberNavController()
     val versionsState by versionsViewModel.state.collectAsStateWithLifecycle()
@@ -75,6 +77,7 @@ fun LauncherRoot(
                     selected = versionsState.selected,
                     prepared = versionsState.selectedPrepared,
                     onPrepare = { versionsState.selected?.let(versionsViewModel::prepare) },
+                    onLaunch = { versionsState.selected?.let(onLaunch) },
                     onOpenVersions = { go(Destination.VERSIONS) },
                 )
             }

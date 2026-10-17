@@ -26,5 +26,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Proses terpisah: library native game tidak bisa di-unload, jadi proses ini dimatikan saat ditutup. -->
+        <activity
+            android:name=".ui.launch.LaunchActivity"
+            android:configChanges="orientation|screenSize|smallestScreenSize|screenLayout|keyboardHidden|uiMode"
+            android:exported="false"
+            android:process=":game"
+            android:theme="@style/Theme.Sally" />
     </application>
 </manifest>

@@ -37,7 +37,7 @@
 
     <string name="home_selected_meta">Minecraft %1$s</string>
     <string name="home_change_version">Ganti versi</string>
-    <string name="home_launch_soon">Peluncuran game hadir di Tahap 3b.</string>
+    <string name="home_launch_soon">Tahap uji: library dimuat dan diperiksa. Jendela game menyusul di Tahap 3b-2.</string>
     <string name="home_prepare">Siapkan versi</string>
     <string name="home_prepare_hint">Ekstrak library dulu sebelum bermain.</string>
 
@@ -77,4 +77,16 @@
     <string name="msg_prepared">%1$s siap dimainkan.</string>
     <string name="err_prepare_no_main_lib">libminecraftpe.so tidak ditemukan di APK ini.</string>
     <string name="err_prepare_bad_elf">Library %1$s bukan arm64 yang valid.</string>
+
+    <string name="launch_title">Memuat game</string>
+    <string name="launch_running">Memeriksa versi dan memuat library…</string>
+    <string name="launch_done">Semua library berhasil dimuat. Jendela game hadir di Tahap 3b-2.</string>
+    <string name="launch_partial">%1$d library tertahan karena butuh dependensi yang belum disediakan launcher (Tahap 3b-2). Lihat log.</string>
+    <string name="launch_failed">Ada library yang gagal dimuat. Lihat log di bawah.</string>
+    <string name="launch_back">Kembali</string>
+    <string name="err_launch_no_version">Versi game tidak ditemukan. Pilih versi lagi di tab Versi.</string>
+    <string name="err_preflight_not_arm64">Perangkat ini tidak mendukung arm64-v8a, jadi Minecraft Bedrock tidak bisa dijalankan.</string>
+    <string name="err_preflight_not_prepared">Versi belum disiapkan. Jalankan \"Siapkan versi\" dulu.</string>
+    <string name="err_preflight_bad_elf">Library %1$s tidak bisa dibaca sebagai ELF arm64.</string>
+    <string name="err_preflight_cycle">Dependensi library saling melingkar: %1$s</string>
 </resources>

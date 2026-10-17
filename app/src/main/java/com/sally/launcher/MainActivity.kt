@@ -1,5 +1,6 @@
 package com.sally.launcher
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -10,6 +11,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sally.launcher.data.settings.AppSettings
 import com.sally.launcher.ui.LauncherRoot
+import com.sally.launcher.ui.launch.LaunchActivity
 import com.sally.launcher.ui.theme.SallyTheme
 import com.sally.launcher.ui.versions.VersionsViewModel
 import kotlinx.coroutines.launch
@@ -37,6 +39,12 @@ class MainActivity : ComponentActivity() {
                     versionsViewModel = versionsViewModel,
                     onThemeMode = { mode -> scope.launch { app.settings.setThemeMode(mode) } },
                     onDynamicColor = { on -> scope.launch { app.settings.setDynamicColor(on) } },
+                    onLaunch = { version ->
+                        startActivity(
+                            Intent(this, LaunchActivity::class.java)
+                                .putExtra(LaunchActivity.EXTRA_VERSION_ID, version.id),
+                        )
+                    },
                 )
             }
         }

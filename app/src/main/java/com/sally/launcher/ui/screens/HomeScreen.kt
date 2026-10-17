@@ -31,6 +31,7 @@ fun HomeScreen(
     selected: GameVersion?,
     prepared: Boolean,
     onPrepare: () -> Unit,
+    onLaunch: () -> Unit,
     onOpenVersions: () -> Unit,
 ) {
     SallyScreen(title = stringResource(R.string.home_title)) { padding ->
@@ -85,8 +86,7 @@ fun HomeScreen(
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             } else {
-                // Tahap 3b menyalakan tombol ini.
-                Button(onClick = {}, enabled = false, modifier = Modifier.fillMaxWidth()) {
+                Button(onClick = onLaunch, enabled = selected != null, modifier = Modifier.fillMaxWidth()) {
                     Icon(Icons.Rounded.PlayArrow, contentDescription = null)
                     Spacer(Modifier.width(8.dp))
                     Text(stringResource(R.string.home_launch))

@@ -24,7 +24,9 @@ class SallyApp : Application() {
         super.onCreate()
         paths = LauncherPaths(this).also {
             it.ensureBase()
-            it.clearStaging()
+            // Proses :game (Tahap 3b) ikut membuat SallyApp; jangan hapus area kerja impor
+            // yang sedang dipakai proses utama.
+            if (Application.getProcessName() == packageName) it.clearStaging()
         }
         settings = SettingsRepository(this)
         versions = VersionRepository(paths)
