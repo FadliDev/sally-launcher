@@ -23,9 +23,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.sally.launcher.R
+import com.sally.launcher.data.versions.GameVersion
 
 @Composable
-fun HomeScreen(onOpenVersions: () -> Unit) {
+fun HomeScreen(selected: GameVersion?, onOpenVersions: () -> Unit) {
     SallyScreen(title = stringResource(R.string.home_title)) { padding ->
         Column(
             modifier = Modifier
@@ -34,35 +35,49 @@ fun HomeScreen(onOpenVersions: () -> Unit) {
                 .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            // Tahap 2 mengganti kartu ini dengan versi terpilih setelah ada versi terpasang.
+            val onContainer = MaterialTheme.colorScheme.onPrimaryContainer
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
             ) {
                 Column(Modifier.padding(20.dp)) {
                     Text(
-                        stringResource(R.string.home_no_version_title),
+                        text = selected?.displayName ?: stringResource(R.string.home_no_version_title),
                         style = MaterialTheme.typography.titleLarge,
-                        color = MaterialTheme.colorScheme.onPrimaryContainer,
+                        color = onContainer,
                     )
                     Spacer(Modifier.height(8.dp))
                     Text(
-                        stringResource(R.string.home_no_version_body),
+                        text = if (selected != null) {
+                            stringResource(R.string.home_selected_meta, selected.versionName)
+                        } else {
+                            stringResource(R.string.home_no_version_body)
+                        },
                         style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onPrimaryContainer,
+                        color = onContainer,
                     )
                     Spacer(Modifier.height(16.dp))
                     FilledTonalButton(onClick = onOpenVersions) {
-                        Text(stringResource(R.string.home_open_versions))
+                        Text(
+                            stringResource(
+                                if (selected != null) R.string.home_change_version else R.string.home_open_versions,
+                            ),
+                        )
                     }
                 }
             }
 
+            // Tahap 3 menyalakan tombol ini.
             Button(onClick = {}, enabled = false, modifier = Modifier.fillMaxWidth()) {
                 Icon(Icons.Rounded.PlayArrow, contentDescription = null)
                 Spacer(Modifier.width(8.dp))
                 Text(stringResource(R.string.home_launch))
             }
+            Text(
+                stringResource(R.string.home_launch_soon),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
         }
     }
 }

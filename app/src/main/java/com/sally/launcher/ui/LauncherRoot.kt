@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -23,15 +24,18 @@ import com.sally.launcher.ui.screens.ContentScreen
 import com.sally.launcher.ui.screens.HomeScreen
 import com.sally.launcher.ui.screens.SettingsScreen
 import com.sally.launcher.ui.screens.VersionsScreen
+import com.sally.launcher.ui.versions.VersionsViewModel
 
 @Composable
 fun LauncherRoot(
     settings: AppSettings,
     storageRoot: String,
+    versionsViewModel: VersionsViewModel,
     onThemeMode: (ThemeMode) -> Unit,
     onDynamicColor: (Boolean) -> Unit,
 ) {
     val navController = rememberNavController()
+    val versionsState by versionsViewModel.state.collectAsStateWithLifecycle()
     val backStack by navController.currentBackStackEntryAsState()
     val currentRoute = backStack?.destination?.route
 
@@ -65,9 +69,12 @@ fun LauncherRoot(
             modifier = Modifier.padding(innerPadding),
         ) {
             composable(Destination.HOME.route) {
-                HomeScreen(onOpenVersions = { go(Destination.VERSIONS) })
+                HomeScreen(
+                    selected = versionsState.selected,
+                    onOpenVersions = { go(Destination.VERSIONS) },
+                )
             }
-            composable(Destination.VERSIONS.route) { VersionsScreen() }
+            composable(Destination.VERSIONS.route) { VersionsScreen(versionsViewModel) }
             composable(Destination.CONTENT.route) { ContentScreen() }
             composable(Destination.SETTINGS.route) {
                 SettingsScreen(

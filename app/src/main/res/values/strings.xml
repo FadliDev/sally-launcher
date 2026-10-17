@@ -16,8 +16,7 @@
     <string name="versions_title">Versi</string>
     <string name="versions_empty_title">Belum ada versi terpasang</string>
     <string name="versions_empty_body">Versi yang kamu impor akan tampil di sini, masing-masing dengan data terpisah.</string>
-    <string name="versions_import">Impor APK</string>
-    <string name="versions_import_soon">Impor APK hadir di Tahap 2.</string>
+    <string name="versions_import">Tambah versi</string>
 
     <string name="content_title">Konten</string>
     <string name="content_empty_title">Belum ada konten</string>
@@ -35,4 +34,38 @@
     <string name="settings_storage_root">Lokasi data launcher</string>
     <string name="settings_about">Tentang</string>
     <string name="settings_version">Versi aplikasi</string>
+
+    <string name="home_selected_meta">Minecraft %1$s</string>
+    <string name="home_change_version">Ganti versi</string>
+    <string name="home_launch_soon">Peluncuran game hadir di Tahap 3.</string>
+
+    <string name="versions_pick_files">Pilih file APK</string>
+    <string name="versions_from_installed">Dari Minecraft terpasang</string>
+    <string name="version_meta">Minecraft %1$s · %2$s</string>
+    <string name="action_rename">Ganti nama</string>
+    <string name="action_delete">Hapus</string>
+    <string name="action_cancel">Batal</string>
+    <string name="action_save">Simpan</string>
+    <string name="action_more">Opsi lainnya</string>
+    <string name="rename_title">Ganti nama versi</string>
+    <string name="rename_label">Nama</string>
+    <string name="delete_title">Hapus versi?</string>
+    <string name="delete_body">%1$s beserta seluruh datanya akan dihapus dari launcher. Aksi ini tidak bisa dibatalkan.</string>
+
+    <string name="import_title">Menambah versi</string>
+    <string name="import_stage_copy">Menyalin file…</string>
+    <string name="import_stage_verify">Memeriksa APK…</string>
+    <string name="import_stage_finish">Menyimpan versi…</string>
+    <string name="msg_import_done">%1$s berhasil ditambahkan.</string>
+    <string name="msg_deleted">%1$s dihapus.</string>
+
+    <string name="err_no_files">Tidak ada file yang dipilih.</string>
+    <string name="err_not_apk">%1$s bukan APK yang valid.</string>
+    <string name="err_wrong_package">File ini bukan Minecraft Bedrock (paket: %1$s).</string>
+    <string name="err_mixed_versions">File berasal dari versi yang berbeda. Pilih APK utama dan split dari versi yang sama.</string>
+    <string name="err_no_base">APK utama tidak ditemukan. Sertakan base.apk bersama split-nya.</string>
+    <string name="err_multiple_base">Ada lebih dari satu APK utama di pilihanmu.</string>
+    <string name="err_no_arm64">Library arm64-v8a tidak ditemukan. Sertakan split config.arm64_v8a atau pakai APK lengkap.</string>
+    <string name="err_not_installed">Minecraft belum terpasang di perangkat ini.</string>
+    <string name="err_io">Gagal membaca atau menyimpan file: %1$s</string>
 </resources>

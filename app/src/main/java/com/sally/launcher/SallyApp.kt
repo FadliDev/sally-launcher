@@ -3,6 +3,8 @@ package com.sally.launcher
 import android.app.Application
 import com.sally.launcher.data.settings.SettingsRepository
 import com.sally.launcher.data.storage.LauncherPaths
+import com.sally.launcher.data.versions.ApkImporter
+import com.sally.launcher.data.versions.VersionRepository
 
 class SallyApp : Application() {
 
@@ -10,10 +12,19 @@ class SallyApp : Application() {
         private set
     lateinit var settings: SettingsRepository
         private set
+    lateinit var versions: VersionRepository
+        private set
+    lateinit var importer: ApkImporter
+        private set
 
     override fun onCreate() {
         super.onCreate()
-        paths = LauncherPaths(this).also { it.ensureBase() }
+        paths = LauncherPaths(this).also {
+            it.ensureBase()
+            it.clearStaging()
+        }
         settings = SettingsRepository(this)
+        versions = VersionRepository(paths)
+        importer = ApkImporter(this, paths, versions)
     }
 }
