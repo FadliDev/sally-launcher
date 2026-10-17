@@ -12,7 +12,7 @@ import java.util.UUID
  *   profiles/<id>/
  *     version.json         metadata versi
  *     game/base.apk        APK utama
- *     game/splits/*.apk    split APK
+ *     game/splits/       split APK
  *     libs/                library native hasil ekstrak (Tahap 3)
  *     mods/                mod native milik profil (Tahap 4)
  *     data/                data game, terisolasi per profil
