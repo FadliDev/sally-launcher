@@ -36,6 +36,7 @@ import com.sally.launcher.R
 import com.sally.launcher.SallyApp
 import com.sally.launcher.data.settings.ThemeMode
 import com.sally.launcher.runtime.GameAssets
+import com.sally.launcher.runtime.LaunchLog
 import com.sally.launcher.runtime.LoadStatus
 import com.sally.launcher.runtime.NativeLoader
 import com.sally.launcher.runtime.Preflight
@@ -56,6 +57,7 @@ class LaunchActivity : ComponentActivity() {
     private val log = mutableStateListOf<String>()
     private var phase by mutableStateOf(Phase.WORKING)
     private var summary by mutableStateOf<String?>(null)
+    private var launchLog: LaunchLog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
@@ -84,6 +86,11 @@ class LaunchActivity : ComponentActivity() {
 
     private suspend fun run(versionId: String?) {
         val app = application as SallyApp
+        launchLog = LaunchLog(java.io.File(app.paths.root, "last-launch.log")).also { l ->
+            val crashed = l.previousCrash()
+            l.reset()
+            if (crashed != null) addLog("Peluncuran sebelumnya berhenti mendadak setelah: $crashed")
+        }
         val version = versionId?.let { withContext(Dispatchers.IO) { app.versions.read(it) } }
         if (version == null) {
             fail(getString(R.string.err_launch_no_version))
@@ -116,8 +123,14 @@ class LaunchActivity : ComponentActivity() {
         }
 
         val results = withContext(Dispatchers.IO) {
-            NativeLoader.loadAll(report.libsDir, plan) { r ->
+            NativeLoader.loadAll(
+                report.libsDir,
+                plan,
+                deferred = setOf(MAIN_LIB),
+                onBeforeLoad = { name -> addLogLater("MEMUAT  $name") },
+            ) { r ->
                 val line = when (r.status) {
+                    LoadStatus.DEFERRED -> "DITUNDA  ${r.name}: ${r.detail}"
                     LoadStatus.LOADED -> "OK      ${r.name} (${r.millis} ms)"
                     LoadStatus.FAILED -> "GAGAL   ${r.name}: ${r.detail}"
                     LoadStatus.BLOCKED -> "TERTAHAN ${r.name}: ${r.detail}"
@@ -126,6 +139,7 @@ class LaunchActivity : ComponentActivity() {
             }
         }
 
+        launchLog?.append(LaunchLog.DONE)
         val failed = results.count { it.status == LoadStatus.FAILED }
         val blocked = results.count { it.status == LoadStatus.BLOCKED }
         when {
@@ -136,6 +150,10 @@ class LaunchActivity : ComponentActivity() {
             blocked > 0 -> {
                 phase = Phase.PARTIAL
                 summary = getString(R.string.launch_partial, blocked)
+            }
+            results.any { it.status == LoadStatus.DEFERRED } -> {
+                phase = Phase.DONE
+                summary = getString(R.string.launch_deferred)
             }
             else -> {
                 phase = Phase.DONE
@@ -151,10 +169,12 @@ class LaunchActivity : ComponentActivity() {
     }
 
     private fun addLog(line: String) {
+        launchLog?.append(line)
         log.add(line)
     }
 
     private fun addLogLater(line: String) {
+        launchLog?.append(line)
         runOnUiThread { log.add(line) }
     }
 
@@ -166,6 +186,7 @@ class LaunchActivity : ComponentActivity() {
 
     companion object {
         const val EXTRA_VERSION_ID = "com.sally.launcher.extra.VERSION_ID"
+        private const val MAIN_LIB = "libminecraftpe.so"
     }
 }
 

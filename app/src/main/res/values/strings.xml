@@ -89,4 +89,5 @@
     <string name="err_preflight_not_prepared">Versi belum disiapkan. Jalankan \"Siapkan versi\" dulu.</string>
     <string name="err_preflight_bad_elf">Library %1$s tidak bisa dibaca sebagai ELF arm64.</string>
     <string name="err_preflight_cycle">Dependensi library saling melingkar: %1$s</string>
+    <string name="launch_deferred">Library pendukung berhasil dimuat. libminecraftpe.so sengaja ditunda sampai glue game siap (Tahap 3b-2).</string>
 </resources>
