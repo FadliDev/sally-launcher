@@ -10,7 +10,8 @@ Jika sync mengeluh soal versi dependency, naikkan versinya di `gradle/libs.versi
 ## Tahapan
 - [x] 1. Fondasi: project, tema MD3, navigasi, penyimpanan profil, pengaturan
 - [x] 2. Impor APK (berkas, bundle .apks/.xapk, atau dari Minecraft terpasang), validasi, manajer versi terisolasi
-- [ ] 3. Ekstrak library dan runtime launch
+- [x] 3a. Ekstrak library native + validasi ELF
+- [ ] 3b. Runtime launch (classloader game, resource, jembatan JNI)
 - [ ] 4. Loader mod native dan config mod
 - [ ] 5. Manajer konten (world, resource pack, server, backup)
 - [ ] 6. Akun Xbox

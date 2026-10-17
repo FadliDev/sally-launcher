@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Build
 import androidx.compose.material.icons.rounded.PlayArrow
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -26,7 +27,12 @@ import com.sally.launcher.R
 import com.sally.launcher.data.versions.GameVersion
 
 @Composable
-fun HomeScreen(selected: GameVersion?, onOpenVersions: () -> Unit) {
+fun HomeScreen(
+    selected: GameVersion?,
+    prepared: Boolean,
+    onPrepare: () -> Unit,
+    onOpenVersions: () -> Unit,
+) {
     SallyScreen(title = stringResource(R.string.home_title)) { padding ->
         Column(
             modifier = Modifier
@@ -67,17 +73,30 @@ fun HomeScreen(selected: GameVersion?, onOpenVersions: () -> Unit) {
                 }
             }
 
-            // Tahap 3 menyalakan tombol ini.
-            Button(onClick = {}, enabled = false, modifier = Modifier.fillMaxWidth()) {
-                Icon(Icons.Rounded.PlayArrow, contentDescription = null)
-                Spacer(Modifier.width(8.dp))
-                Text(stringResource(R.string.home_launch))
+            if (selected != null && !prepared) {
+                Button(onClick = onPrepare, modifier = Modifier.fillMaxWidth()) {
+                    Icon(Icons.Rounded.Build, contentDescription = null)
+                    Spacer(Modifier.width(8.dp))
+                    Text(stringResource(R.string.home_prepare))
+                }
+                Text(
+                    stringResource(R.string.home_prepare_hint),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            } else {
+                // Tahap 3b menyalakan tombol ini.
+                Button(onClick = {}, enabled = false, modifier = Modifier.fillMaxWidth()) {
+                    Icon(Icons.Rounded.PlayArrow, contentDescription = null)
+                    Spacer(Modifier.width(8.dp))
+                    Text(stringResource(R.string.home_launch))
+                }
+                Text(
+                    stringResource(R.string.home_launch_soon),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
             }
-            Text(
-                stringResource(R.string.home_launch_soon),
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
         }
     }
 }

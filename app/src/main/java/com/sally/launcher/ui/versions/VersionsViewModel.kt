@@ -13,7 +13,10 @@ import com.sally.launcher.data.versions.ImportException
 import com.sally.launcher.data.versions.ImportFailure
 import com.sally.launcher.data.versions.ImportProgress
 import com.sally.launcher.data.versions.ImportStage
+import com.sally.launcher.data.versions.PrepareException
+import com.sally.launcher.data.versions.PrepareFailure
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -22,6 +25,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /** Pesan sekali tampil (snackbar). `id` membedakan dua pesan yang isinya sama. */
 data class UiMessage(
@@ -30,14 +34,19 @@ data class UiMessage(
     val id: Long = System.nanoTime(),
 )
 
+data class PrepareProgress(val version: GameVersion, val fraction: Float)
+
 data class VersionsUiState(
     val loading: Boolean = true,
     val versions: List<GameVersion> = emptyList(),
+    val preparedIds: Set<String> = emptySet(),
     val selectedId: String? = null,
     val importing: ImportProgress? = null,
+    val preparing: PrepareProgress? = null,
     val message: UiMessage? = null,
 ) {
     val selected: GameVersion? get() = versions.firstOrNull { it.id == selectedId }
+    val selectedPrepared: Boolean get() = selected?.id in preparedIds
 }
 
 class VersionsViewModel(private val app: SallyApp) : ViewModel() {
@@ -49,6 +58,7 @@ class VersionsViewModel(private val app: SallyApp) : ViewModel() {
     val state: StateFlow<VersionsUiState> = _state.asStateFlow()
 
     private var importJob: Job? = null
+    private var prepareJob: Job? = null
 
     init {
         viewModelScope.launch {
@@ -62,7 +72,10 @@ class VersionsViewModel(private val app: SallyApp) : ViewModel() {
 
     private suspend fun reload() {
         val list = repository.list()
-        _state.update { it.copy(versions = list, loading = false) }
+        val prepared = withContext(Dispatchers.IO) {
+            list.filter { app.libraries.isPrepared(it.id) }.map { it.id }.toSet()
+        }
+        _state.update { it.copy(versions = list, preparedIds = prepared, loading = false) }
     }
 
     fun select(id: String) {
@@ -101,6 +114,35 @@ class VersionsViewModel(private val app: SallyApp) : ViewModel() {
 
     fun cancelImport() {
         importJob?.cancel()
+    }
+
+    fun prepare(version: GameVersion) {
+        if (prepareJob?.isActive == true) return
+        prepareJob = viewModelScope.launch {
+            _state.update { it.copy(preparing = PrepareProgress(version, 0f)) }
+            try {
+                app.libraries.prepare(version) { fraction ->
+                    _state.update { it.copy(preparing = PrepareProgress(version, fraction)) }
+                }
+                reload()
+                _state.update {
+                    it.copy(message = UiMessage(R.string.msg_prepared, listOf(version.displayName)))
+                }
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: PrepareException) {
+                _state.update { it.copy(message = UiMessage(e.failure.messageRes, listOfNotNull(e.detail))) }
+            } catch (e: Exception) {
+                val failure = PrepareFailure.IO
+                _state.update { it.copy(message = UiMessage(failure.messageRes, listOfNotNull(e.message))) }
+            } finally {
+                _state.update { it.copy(preparing = null) }
+            }
+        }
+    }
+
+    fun cancelPrepare() {
+        prepareJob?.cancel()
     }
 
     fun consumeMessage(id: Long) {

@@ -37,7 +37,9 @@
 
     <string name="home_selected_meta">Minecraft %1$s</string>
     <string name="home_change_version">Ganti versi</string>
-    <string name="home_launch_soon">Peluncuran game hadir di Tahap 3.</string>
+    <string name="home_launch_soon">Peluncuran game hadir di Tahap 3b.</string>
+    <string name="home_prepare">Siapkan versi</string>
+    <string name="home_prepare_hint">Ekstrak library dulu sebelum bermain.</string>
 
     <string name="versions_pick_files">Pilih file APK</string>
     <string name="versions_from_installed">Dari Minecraft terpasang</string>
@@ -68,4 +70,11 @@
     <string name="err_no_arm64">Library arm64-v8a tidak ditemukan. Sertakan split config.arm64_v8a atau pakai APK lengkap.</string>
     <string name="err_not_installed">Minecraft belum terpasang di perangkat ini.</string>
     <string name="err_io">Gagal membaca atau menyimpan file: %1$s</string>
+
+    <string name="version_prepared">Siap dimainkan</string>
+    <string name="prepare_title">Menyiapkan versi</string>
+    <string name="prepare_label">Mengekstrak library…</string>
+    <string name="msg_prepared">%1$s siap dimainkan.</string>
+    <string name="err_prepare_no_main_lib">libminecraftpe.so tidak ditemukan di APK ini.</string>
+    <string name="err_prepare_bad_elf">Library %1$s bukan arm64 yang valid.</string>
 </resources>

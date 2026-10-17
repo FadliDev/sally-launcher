@@ -4,6 +4,7 @@ import android.app.Application
 import com.sally.launcher.data.settings.SettingsRepository
 import com.sally.launcher.data.storage.LauncherPaths
 import com.sally.launcher.data.versions.ApkImporter
+import com.sally.launcher.data.versions.LibraryExtractor
 import com.sally.launcher.data.versions.VersionRepository
 
 class SallyApp : Application() {
@@ -16,6 +17,8 @@ class SallyApp : Application() {
         private set
     lateinit var importer: ApkImporter
         private set
+    lateinit var libraries: LibraryExtractor
+        private set
 
     override fun onCreate() {
         super.onCreate()
@@ -26,5 +29,6 @@ class SallyApp : Application() {
         settings = SettingsRepository(this)
         versions = VersionRepository(paths)
         importer = ApkImporter(this, paths, versions)
+        libraries = LibraryExtractor(paths)
     }
 }

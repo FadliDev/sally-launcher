@@ -21,7 +21,9 @@ import com.sally.launcher.data.settings.AppSettings
 import com.sally.launcher.data.settings.ThemeMode
 import com.sally.launcher.ui.nav.Destination
 import com.sally.launcher.ui.screens.ContentScreen
+import com.sally.launcher.R
 import com.sally.launcher.ui.screens.HomeScreen
+import com.sally.launcher.ui.screens.ProgressDialog
 import com.sally.launcher.ui.screens.SettingsScreen
 import com.sally.launcher.ui.screens.VersionsScreen
 import com.sally.launcher.ui.versions.VersionsViewModel
@@ -71,6 +73,8 @@ fun LauncherRoot(
             composable(Destination.HOME.route) {
                 HomeScreen(
                     selected = versionsState.selected,
+                    prepared = versionsState.selectedPrepared,
+                    onPrepare = { versionsState.selected?.let(versionsViewModel::prepare) },
                     onOpenVersions = { go(Destination.VERSIONS) },
                 )
             }
@@ -85,5 +89,16 @@ fun LauncherRoot(
                 )
             }
         }
+    }
+
+    // Progres persiapan tampil di tab mana pun.
+    versionsState.preparing?.let { progress ->
+        ProgressDialog(
+            title = stringResource(R.string.prepare_title),
+            label = stringResource(R.string.prepare_label),
+            fraction = progress.fraction,
+            cancelLabel = stringResource(R.string.action_cancel),
+            onCancel = versionsViewModel::cancelPrepare,
+        )
     }
 }

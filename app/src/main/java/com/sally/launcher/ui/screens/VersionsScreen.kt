@@ -130,6 +130,7 @@ fun VersionsScreen(viewModel: VersionsViewModel) {
                     VersionCard(
                         version = version,
                         selected = version.id == state.selectedId,
+                        prepared = version.id in state.preparedIds,
                         onSelect = { viewModel.select(version.id) },
                         onRename = { renameTarget = version },
                         onDelete = { deleteTarget = version },
@@ -216,6 +217,7 @@ fun VersionsScreen(viewModel: VersionsViewModel) {
 private fun VersionCard(
     version: GameVersion,
     selected: Boolean,
+    prepared: Boolean,
     onSelect: () -> Unit,
     onRename: () -> Unit,
     onDelete: () -> Unit,
@@ -246,6 +248,13 @@ private fun VersionCard(
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
+                if (prepared) {
+                    Text(
+                        stringResource(R.string.version_prepared),
+                        style = MaterialTheme.typography.labelLarge,
+                        color = MaterialTheme.colorScheme.primary,
+                    )
+                }
                 if (version.abis.isNotEmpty()) {
                     Text(
                         version.abis.joinToString(),

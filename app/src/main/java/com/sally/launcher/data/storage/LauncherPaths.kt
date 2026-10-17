@@ -13,7 +13,7 @@ import java.util.UUID
  *     version.json         metadata versi
  *     game/base.apk        APK utama
  *     game/splits/       split APK
- *     libs/                library native hasil ekstrak (Tahap 3)
+ *     libs/arm64-v8a/      library native hasil ekstrak (Tahap 3)
  *     mods/                mod native milik profil (Tahap 4)
  *     data/                data game, terisolasi per profil
  *     cache/
@@ -31,6 +31,7 @@ class LauncherPaths(context: Context) {
     fun baseApk(profileId: String): File = File(gameDir(profileId), "base.apk")
     fun splitsDir(profileId: String): File = File(gameDir(profileId), "splits")
     fun libsDir(profileId: String): File = File(profileDir(profileId), "libs")
+    fun abiLibsDir(profileId: String, abi: String): File = File(libsDir(profileId), abi)
     fun modsDir(profileId: String): File = File(profileDir(profileId), "mods")
     fun dataDir(profileId: String): File = File(profileDir(profileId), "data")
     fun cacheDir(profileId: String): File = File(profileDir(profileId), "cache")
