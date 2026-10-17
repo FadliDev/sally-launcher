@@ -61,6 +61,30 @@ class LoadOrderTest {
         }
     }
 
+    @Test fun reachableFollowsOnlyDependenciesOfRoot() {
+        val libs = mapOf(
+            "libminecraftpe.so" to lib("libminecraftpe.so", "libfmod.so", "libreal.so", "libc.so"),
+            "libfmod.so" to lib("libfmod.so", "libc++_shared.so"),
+            "libc++_shared.so" to lib("libc++_shared.so"),
+            "renamed.so" to lib("libreal.so"),
+            "libpairipcore.so" to lib("libpairipcore.so", "libc.so"),
+        )
+        assertEquals(
+            setOf("libminecraftpe.so", "libfmod.so", "libc++_shared.so", "renamed.so"),
+            LoadOrder.reachable(libs, "libminecraftpe.so"),
+        )
+    }
+
+    @Test fun reachableWithoutRootKeepsEverything() {
+        val libs = mapOf("a.so" to lib("a.so"), "b.so" to lib("b.so"))
+        assertEquals(setOf("a.so", "b.so"), LoadOrder.reachable(libs, "libminecraftpe.so"))
+    }
+
+    @Test fun reachableSurvivesCycles() {
+        val libs = mapOf("a.so" to lib("a.so", "b.so"), "b.so" to lib("b.so", "a.so"))
+        assertEquals(setOf("a.so", "b.so"), LoadOrder.reachable(libs, "a.so"))
+    }
+
     @Test fun selfReferenceIsIgnored() {
         val result = plan(mapOf("a.so" to lib("a.so", "a.so")))
         assertEquals(listOf("a.so"), result.order)

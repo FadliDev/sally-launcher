@@ -21,6 +21,7 @@ data class PreflightReport(
     val detail: String? = null,
     val libsDir: File? = null,
     val plan: LoadPlan? = null,
+    val skipped: List<String> = emptyList(),
 ) {
     val ok: Boolean get() = issue == null && plan != null
 }
@@ -48,8 +49,17 @@ class Preflight(private val paths: LauncherPaths, private val libraries: Library
             }
         }
 
+        // Hanya muat yang dibutuhkan library utama; sisanya (mis. proteksi Play di sisi Java) dilewati.
+        val keep = LoadOrder.reachable(infos, LibraryEntries.MAIN_LIB)
+        val used = infos.filterKeys { it in keep }
+        val skipped = infos.keys.filter { it !in keep }.sorted()
+
         return try {
-            PreflightReport(libsDir = dir, plan = LoadOrder.compute(infos) { name -> isSystemLibrary(name) })
+            PreflightReport(
+                libsDir = dir,
+                plan = LoadOrder.compute(used) { name -> isSystemLibrary(name) },
+                skipped = skipped,
+            )
         } catch (e: LoadCycleException) {
             PreflightReport(PreflightIssue.CYCLE, e.message, dir)
         }

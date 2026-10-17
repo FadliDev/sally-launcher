@@ -106,6 +106,9 @@ class LaunchActivity : ComponentActivity() {
             return
         }
         addLog("Urutan muat: ${plan.order.joinToString()}")
+        if (report.skipped.isNotEmpty()) {
+            addLog("Dilewati (tidak dibutuhkan libminecraftpe): ${report.skipped.joinToString()}")
+        }
         plan.unresolved.forEach { (dep, askers) ->
             addLog("Belum tersedia: $dep (dibutuhkan ${askers.joinToString()})")
         }
